@@ -5,8 +5,7 @@ Welcome to Pinnavle Doodle! This web application allows users to create and coll
 ## Features
 
 -   **Drawing Canvas:** A canvas where users can express their creativity through drawings.
--   **Extra Features:** Additional tools or functionalities to extend the drawing capabilities.
--   **Collaboration:** [Optional] Real-time collaboration for multiple users.
+-   **Collaboration:** Real-time collaboration for multiple users.
 
 ## Technologies Used
 
