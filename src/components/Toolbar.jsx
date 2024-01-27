@@ -55,7 +55,7 @@ const toolsCollection = [
     },
     {
         id: 3,
-        name: "Square",
+        name: "Rectangle",
         icon: SquareIcon,
     },
     {
@@ -102,6 +102,7 @@ export default function Toolbar() {
         <ToolbarWrapper>
             {toolsCollection.map((tool) => (
                 <Tool
+                    key={tool.id}
                     isActive={tool.name === activeShape}
                     onClick={() => setActiveShape(tool.name)}
                 >

@@ -1,8 +1,8 @@
 import { useRef, useEffect } from "react";
-import { Circle, Transformer } from "react-konva";
+import { Rect, Transformer } from "react-konva";
 
-export default function CircleShape({
-    circle,
+export default function RectangleShape({
+    shape,
     index,
     handleDragEnd,
     setSelectedShapeIndex,
@@ -22,27 +22,28 @@ export default function CircleShape({
 
     return (
         <>
-            <Circle
+            <Rect
                 key={index}
-                x={circle.x}
-                y={circle.y}
-                draggable
-                ref={shapeRef}
+                x={shape.x}
+                y={shape.y}
+                width={shape.width}
+                height={shape.height}
                 stroke="white"
-                onDragEnd={(e) => handleDragEnd(e, index)}
-                radius={circle.radius}
                 strokeWidth={2}
+                ref={shapeRef}
+                draggable
+                onDragEnd={(e) => handleDragEnd(e, index)}
                 onClick={() => setSelectedShapeIndex(index)}
                 onTransformEnd={(e) => {
                     const node = e.target;
                     const index = node.index;
-
                     const updatedshapes = [...shapes];
                     updatedshapes[index] = {
                         ...updatedshapes[index],
                         x: node.x(),
                         y: node.y(),
-                        radius: node.radius() * node.scaleX(),
+                        width: node.width() * node.scaleX(),
+                        height: node.height() * node.scaleY(),
                     };
                     setShapes(updatedshapes);
                     node.scaleX(1);
