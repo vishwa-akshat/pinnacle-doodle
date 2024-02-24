@@ -6,6 +6,7 @@ export default function TextShape({
     index,
     handleDragEnd,
     setSelectedShapeIndex,
+    selectedShapeIndex,
     isSelected,
     shapes,
     setTextValue,
@@ -36,7 +37,7 @@ export default function TextShape({
                 fontSize={16}
                 fill="white"
                 ref={shapeRef}
-                draggable
+                draggable={selectedShapeIndex === index}
                 onDragEnd={(e) => handleDragEnd(e, index)}
                 onClick={() => setTextValue(shapes[index]?.text || "")}
                 // onTransformEnd={(e) => {

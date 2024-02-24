@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { Stage, Layer } from "react-konva";
+import { Stage, Layer, Line, Rect } from "react-konva";
 import styled from "styled-components";
 
 import CircleShape from "./Circle";
@@ -10,6 +10,8 @@ import LineShape from "./LineShape";
 import ArrowShape from "./Arrow";
 import UndoRedoButtons from "./UndoRedoButtons";
 import TextShape from "./Text";
+import ZoomInZoomOutButtons from "./ZoomInZoomOutButtons";
+// import GridBG from "./GridBG";
 
 const Wrapper = styled.div`
     position: relative;
@@ -19,6 +21,8 @@ const ButtonsWrapper = styled.div`
     z-index: 999;
     bottom: 30px;
     left: 30px;
+    display: flex;
+    gap: 30px;
 `;
 
 export default function Canvas() {
@@ -182,10 +186,47 @@ export default function Canvas() {
         };
         setShapes(updatedShape);
     };
+    const [scale, setScale] = useState(1);
+
+    const Grid = () => {
+        const baseCellSize = 20; // Initial cell size (adjust as needed)
+
+        // Calculate grid dimensions based on canvas size and zoom level
+        const canvasWidth = window.innerWidth;
+        const canvasHeight = window.innerHeight;
+        const numRows = Math.floor(
+            canvasHeight / (baseCellSize * Math.max(scale, 1))
+        );
+        const numCols = Math.floor(
+            canvasWidth / (baseCellSize * Math.max(scale, 1))
+        );
+
+        // Create grid rectangles
+        const gridCells = [];
+        for (let row = 0; row < numRows; row++) {
+            for (let col = 0; col < numCols; col++) {
+                const cellSize = baseCellSize * Math.max(scale, 1);
+                gridCells.push(
+                    <Rect
+                        key={`${row}-${col}`}
+                        x={col * cellSize}
+                        y={row * cellSize}
+                        width={cellSize}
+                        height={cellSize}
+                        fill="lightgray"
+                        stroke="black"
+                    />
+                );
+            }
+        }
+
+        return <Layer>{gridCells}</Layer>;
+    };
 
     return (
         <Wrapper>
             <ButtonsWrapper>
+                <ZoomInZoomOutButtons scale={scale} setScale={setScale} />
                 <UndoRedoButtons
                     history={history}
                     historyIndex={historyIndex}
@@ -206,8 +247,11 @@ export default function Canvas() {
                     cursor: activeShape !== "pointer" ? "grab" : "pointer",
                     background: "#1B4242",
                 }}
+                scaleX={scale}
+                scaleY={scale}
             >
-                <Layer ref={layerRef}>
+                <Grid />
+                <Layer className="grid-layer" ref={layerRef}>
                     {shapes.map((shape, index) => {
                         if (shape.type === "Rectangle") {
                             return (

@@ -6,6 +6,7 @@ export default function ArrowShape({
     index,
     handleDragEnd,
     setSelectedShapeIndex,
+    selectedShapeIndex,
     isSelected,
     shapes,
     setShapes,
@@ -30,7 +31,7 @@ export default function ArrowShape({
                 tension={0.5}
                 lineCap="round"
                 ref={shapeRef}
-                draggable
+                draggable={selectedShapeIndex === index}
                 onDragEnd={(e) => handleDragEnd(e, index)}
                 onClick={() => setSelectedShapeIndex(index)}
                 onTransformEnd={(e) => {

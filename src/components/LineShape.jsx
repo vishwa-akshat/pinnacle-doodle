@@ -31,7 +31,7 @@ export default function LineShape({
                 tension={0.5}
                 ref={shapeRef}
                 lineCap="round"
-                draggable
+                draggable={selectedShapeIndex === index}
                 onDragEnd={(e) => {
                     const node = e.target;
                     const updatedShapes = [...shapes];

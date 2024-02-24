@@ -6,6 +6,7 @@ export default function CircleShape({
     index,
     handleDragEnd,
     setSelectedShapeIndex,
+    selectedShapeIndex,
     isSelected,
     shapes,
     setShapes,
@@ -26,7 +27,7 @@ export default function CircleShape({
                 key={index}
                 x={circle.x}
                 y={circle.y}
-                draggable
+                draggable={selectedShapeIndex === index}
                 ref={shapeRef}
                 stroke="white"
                 onDragEnd={(e) => handleDragEnd(e, index)}

@@ -6,6 +6,7 @@ export default function RectangleShape({
     index,
     handleDragEnd,
     setSelectedShapeIndex,
+    selectedShapeIndex,
     isSelected,
     shapes,
     setShapes,
@@ -31,7 +32,7 @@ export default function RectangleShape({
                 stroke="white"
                 strokeWidth={2}
                 ref={shapeRef}
-                draggable
+                draggable={selectedShapeIndex === index}
                 onDragEnd={(e) => handleDragEnd(e, index)}
                 onClick={() => setSelectedShapeIndex(index)}
                 onTransformEnd={(e) => {
