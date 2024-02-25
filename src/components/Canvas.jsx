@@ -213,8 +213,8 @@ export default function Canvas() {
                         y={row * cellSize}
                         width={cellSize}
                         height={cellSize}
-                        fill="lightgray"
-                        stroke="black"
+                        fill="black"
+                        stroke="gray"
                     />
                 );
             }

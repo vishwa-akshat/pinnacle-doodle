@@ -22,6 +22,9 @@ const Button = styled.div`
     transition: all 0.2s ease;
     border-radius: 8px;
     background-color: ${({ isActive }) => (isActive ? "#5C8374" : "")};
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
 
     &:hover {
         background-color: ${({ isActive }) => (isActive ? "" : "#9ec8b947")};
