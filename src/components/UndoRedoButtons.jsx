@@ -10,14 +10,16 @@ const ButtonsWrapper = styled.div`
     border-radius: 12px;
     padding: 5px 10px;
     gap: 5px;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Button = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 45px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     transition: all 0.2s ease;
     border-radius: 8px;
@@ -29,8 +31,8 @@ const Button = styled.div`
 `;
 
 const ButtonImage = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
 `;
 
 export default function UndoRedoButtons({

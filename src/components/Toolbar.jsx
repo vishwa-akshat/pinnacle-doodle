@@ -18,15 +18,15 @@ const ToolbarWrapper = styled.div`
     background: #092635;
     border-radius: 12px;
     padding: 5px 10px;
-    gap: 5px;
+    gap: 10px;
 `;
 
 const Tool = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     transition: all 0.2s ease;
     border-radius: 8px;
@@ -38,8 +38,8 @@ const Tool = styled.div`
 `;
 
 const ToolImage = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
 `;
 
 const toolsCollection = [

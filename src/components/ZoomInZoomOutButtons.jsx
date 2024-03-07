@@ -5,22 +5,24 @@ const ButtonsWrapper = styled.div`
     display: flex;
     background: #092635;
     border-radius: 12px;
+    align-items: center;
+    justify-content: center;
     padding: 5px 10px;
     gap: 5px;
 `;
 
 const Button = styled.div`
+    align-items: center;
     display: flex;
     justify-content: center;
-    align-items: center;
-    width: 45px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     transition: all 0.2s ease;
     border-radius: 8px;
     background-color: ${({ isActive }) => (isActive ? "#5C8374" : "")};
     color: #fff;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
 
     &:hover {
@@ -30,6 +32,8 @@ const Button = styled.div`
 
 const ScaleText = styled.p`
     color: #fff;
+    margin: 0;
+    font-size: 14px;
 `;
 
 export default function ZoomInZoomOutButtons({ setScale, scale }) {
