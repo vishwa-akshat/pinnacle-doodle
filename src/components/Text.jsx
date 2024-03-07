@@ -33,7 +33,7 @@ export default function TextShape({
                 key={index}
                 x={shape.x}
                 y={shape.y}
-                text={shape.text}
+                text="hello"
                 fontSize={16}
                 fill="white"
                 ref={shapeRef}
@@ -55,14 +55,7 @@ export default function TextShape({
                 //     node.scaleX(1);
                 //     node.scaleY(1);
                 // }}
-            >
-                <input
-                    type="text"
-                    placeholder="Enter text"
-                    value={textValue}
-                    onChange={handleTextChange}
-                />
-            </Text>
+            />
             {isSelected && <Transformer ref={transformerRef} />}
         </>
     );

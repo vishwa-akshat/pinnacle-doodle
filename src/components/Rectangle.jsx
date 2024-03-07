@@ -3,10 +3,9 @@ import { Rect, Transformer } from "react-konva";
 
 export default function RectangleShape({
     shape,
-    index,
     handleDragEnd,
-    setSelectedShapeIndex,
-    selectedShapeIndex,
+    handleShapeClick,
+    selectedShapeId,
     isSelected,
     shapes,
     setShapes,
@@ -24,7 +23,7 @@ export default function RectangleShape({
     return (
         <>
             <Rect
-                key={index}
+                key={shape.id}
                 x={shape.x}
                 y={shape.y}
                 width={shape.width}
@@ -32,9 +31,9 @@ export default function RectangleShape({
                 stroke="white"
                 strokeWidth={2}
                 ref={shapeRef}
-                draggable={selectedShapeIndex === index}
-                onDragEnd={(e) => handleDragEnd(e, index)}
-                onClick={() => setSelectedShapeIndex(index)}
+                draggable={selectedShapeId === shape.id}
+                onDragEnd={(e) => handleDragEnd(e, shape.id)}
+                onClick={() => handleShapeClick(shape.id)}
                 onTransformEnd={(e) => {
                     const node = e.target;
                     const index = node.index;

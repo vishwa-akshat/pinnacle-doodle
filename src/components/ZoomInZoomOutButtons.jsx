@@ -1,9 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import UndoImage from "../assets/undo.svg";
-import RedoImage from "../assets/redo.svg";
-
 const ButtonsWrapper = styled.div`
     display: flex;
     background: #092635;

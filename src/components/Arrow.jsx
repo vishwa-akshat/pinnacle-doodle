@@ -3,10 +3,9 @@ import { Arrow, Transformer } from "react-konva";
 
 export default function ArrowShape({
     shape,
-    index,
     handleDragEnd,
-    setSelectedShapeIndex,
-    selectedShapeIndex,
+    handleShapeClick,
+    selectedShapeId,
     isSelected,
     shapes,
     setShapes,
@@ -24,16 +23,16 @@ export default function ArrowShape({
     return (
         <>
             <Arrow
-                key={index}
+                key={shape.id}
                 points={shape.points}
                 stroke="white"
                 strokeWidth={2}
                 tension={0.5}
                 lineCap="round"
                 ref={shapeRef}
-                draggable={selectedShapeIndex === index}
-                onDragEnd={(e) => handleDragEnd(e, index)}
-                onClick={() => setSelectedShapeIndex(index)}
+                draggable={selectedShapeId === shape.id}
+                onDragEnd={(e) => handleDragEnd(e, shape.id)}
+                onClick={() => handleShapeClick(shape.id)}
                 onTransformEnd={(e) => {
                     const node = e.target;
                     const index = node.index;

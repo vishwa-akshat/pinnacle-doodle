@@ -3,10 +3,9 @@ import { Line, Transformer } from "react-konva";
 
 export default function LineShape({
     shape,
-    index,
     handleDragEnd,
-    setSelectedShapeIndex,
-    selectedShapeIndex,
+    handleShapeClick,
+    selectedShapeId,
     isSelected,
     shapes,
     setShapes,
@@ -24,29 +23,31 @@ export default function LineShape({
     return (
         <>
             <Line
-                key={index}
+                key={shape.id}
                 points={shape.points}
                 stroke="white"
                 strokeWidth={2}
                 tension={0.5}
                 ref={shapeRef}
                 lineCap="round"
-                draggable={selectedShapeIndex === index}
+                draggable={selectedShapeId === shape.id}
                 onDragEnd={(e) => {
                     const node = e.target;
+                    const index = node.index;
                     const updatedShapes = [...shapes];
-                    updatedShapes[selectedShapeIndex] = {
-                        ...updatedShapes[selectedShapeIndex],
+                    updatedShapes[index] = {
+                        ...updatedShapes[index],
                         points: node.points(),
                     };
                     setShapes(updatedShapes);
                 }}
-                onClick={() => setSelectedShapeIndex(index)}
+                onClick={() => handleShapeClick(shape.id)}
                 onTransformEnd={(e) => {
                     const node = e.target;
+                    const index = node.index;
                     const updatedShapes = [...shapes];
-                    updatedShapes[selectedShapeIndex] = {
-                        ...updatedShapes[selectedShapeIndex],
+                    updatedShapes[index] = {
+                        ...updatedShapes[index],
                         points: node.points(),
                     };
                     setShapes(updatedShapes);

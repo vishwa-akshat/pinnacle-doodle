@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Stage, Layer, Line, Rect } from "react-konva";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 
 import CircleShape from "./Circle";
 import RectangleShape from "./Rectangle";
@@ -31,21 +32,29 @@ export default function Canvas() {
 
     const [active, setActive] = useState(false);
     const [shapes, setShapes] = useState([]);
-    const [selectedShapeIndex, setSelectedShapeIndex] = useState(null);
+    const [selectedShapeId, setSelectedShapeId] = useState(null);
     const [history, setHistory] = useState([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [textValue, setTextValue] = useState("");
+    const [scale, setScale] = useState(1);
+    const [stagePos, setStagePos] = useState({ x: 0, y: 0 });
 
     const { activeShape, setActiveShape } = useCanvasStore();
 
+    useEffect(() => {
+        layerRef.current.scale({ x: scale, y: scale });
+        layerRef.current.x(stagePos.x);
+        layerRef.current.y(stagePos.y);
+    }, [stagePos, scale]);
+
     const handleDeleteKeyPress = (e) => {
-        if (e.key === "Delete" && selectedShapeIndex !== null) {
+        if (e.key === "Delete" && selectedShapeId !== null) {
             const updatedShapes = shapes.filter(
-                (_, index) => index !== selectedShapeIndex
+                (_, index) => index !== selectedShapeId
             );
             setShapes(updatedShapes);
             addToHistory(updatedShapes);
-            setSelectedShapeIndex(null);
+            setSelectedShapeId(null);
         }
     };
 
@@ -55,7 +64,7 @@ export default function Canvas() {
         return () => {
             document.removeEventListener("keydown", handleDeleteKeyPress);
         };
-    }, [selectedShapeIndex, shapes]);
+    }, [selectedShapeId, shapes]);
 
     const addToHistory = (shapes) => {
         const newHistory = history.slice(0, historyIndex + 1);
@@ -65,7 +74,11 @@ export default function Canvas() {
     };
 
     const handleMouseDown = () => {
-        if (activeShape === "Selector") {
+        if (
+            activeShape === "Selector" ||
+            activeShape === "Move" ||
+            activeShape === "Eraser"
+        ) {
             return;
         }
 
@@ -80,7 +93,6 @@ export default function Canvas() {
                     x: position.x,
                     y: position.y,
                     radius: 0,
-                    type: activeShape,
                 };
                 break;
             case "Rectangle":
@@ -89,7 +101,6 @@ export default function Canvas() {
                     y: position.y,
                     width: 0,
                     height: 0,
-                    type: activeShape,
                 };
                 break;
             case "Line":
@@ -97,20 +108,22 @@ export default function Canvas() {
             case "Draw":
                 newShape = {
                     points: [position.x, position.y],
-                    type: activeShape,
                 };
                 break;
-            case "Text":
-                newShape = {
-                    x: position.x,
-                    y: position.y,
-                    text: textValue,
-                    type: activeShape,
-                };
-                break;
+            // case "Text":
+            //     newShape = {
+            //         x: position.x,
+            //         y: position.y,
+            //         text: textValue,
+            //         type: activeShape,
+            //     };
+            //     break;
             default:
                 break;
         }
+
+        newShape = { ...newShape, type: activeShape, id: uuidv4() };
+
         const updatedShapes = [...shapes, newShape];
         setShapes(updatedShapes);
         addToHistory(updatedShapes);
@@ -158,10 +171,10 @@ export default function Canvas() {
                     currentShape.width = position.x - currentShape.x;
                     currentShape.height = position.y - currentShape.y;
                     break;
-                case "Text":
-                    currentShape.x = position.x;
-                    currentShape.y = position.y;
-                    break;
+                // case "Text":
+                //     currentShape.x = position.x;
+                //     currentShape.y = position.y;
+                //     break;
                 default:
                     break;
             }
@@ -171,10 +184,11 @@ export default function Canvas() {
     };
 
     const handleMouseUp = () => {
-        setActive(false);
-        setActiveShape("Selector");
-        setSelectedShapeIndex(null);
-        console.log(shapes);
+        if (activeShape !== "Move") {
+            setActiveShape("Selector");
+            setActive(false);
+            setSelectedShapeId(null);
+        }
     };
 
     const handleDragEnd = (e, index) => {
@@ -186,26 +200,51 @@ export default function Canvas() {
         };
         setShapes(updatedShape);
     };
-    const [scale, setScale] = useState(1);
 
     const Grid = () => {
-        const baseCellSize = 20; // Initial cell size (adjust as needed)
+        const baseCellSize = 80; // Initial cell size (adjust as needed)
 
         // Calculate grid dimensions based on canvas size and zoom level
         const canvasWidth = window.innerWidth;
         const canvasHeight = window.innerHeight;
-        const numRows = Math.floor(
-            canvasHeight / (baseCellSize * Math.max(scale, 1))
-        );
-        const numCols = Math.floor(
-            canvasWidth / (baseCellSize * Math.max(scale, 1))
-        );
+        const numRows = Math.ceil(canvasHeight / (baseCellSize * scale));
+        const numCols = Math.ceil(canvasWidth / (baseCellSize * scale));
 
         // Create grid rectangles
         const gridCells = [];
         for (let row = 0; row < numRows; row++) {
             for (let col = 0; col < numCols; col++) {
-                const cellSize = baseCellSize * Math.max(scale, 1);
+                const cellSize = baseCellSize * scale;
+                gridCells.push(
+                    <Rect
+                        strokeWidth={1}
+                        key={`${row}-${col}`}
+                        x={col * cellSize}
+                        y={row * cellSize}
+                        width={cellSize}
+                        height={cellSize}
+                        stroke="#222222"
+                    />
+                );
+            }
+        }
+
+        return <Layer>{gridCells}</Layer>;
+    };
+    const SmallGrid = () => {
+        const baseCellSize = 20; // Initial cell size (adjust as needed)
+
+        // Calculate grid dimensions based on canvas size and zoom level
+        const canvasWidth = window.innerWidth;
+        const canvasHeight = window.innerHeight;
+        const numRows = Math.ceil(canvasHeight / (baseCellSize * scale));
+        const numCols = Math.ceil(canvasWidth / (baseCellSize * scale));
+
+        // Create grid rectangles
+        const gridCells = [];
+        for (let row = 0; row < numRows; row++) {
+            for (let col = 0; col < numCols; col++) {
+                const cellSize = baseCellSize * scale;
                 gridCells.push(
                     <Rect
                         key={`${row}-${col}`}
@@ -214,13 +253,59 @@ export default function Canvas() {
                         width={cellSize}
                         height={cellSize}
                         fill="black"
-                        stroke="gray"
+                        stroke="#3131317a"
+                        strokeWidth={1}
+                        dash={[4, 5]}
                     />
                 );
             }
         }
 
         return <Layer>{gridCells}</Layer>;
+    };
+
+    const handleStageDragEnd = (e) => {
+        setStagePos(e.currentTarget.position());
+    };
+
+    const handleShapeClick = (id) => {
+        if (activeShape === "Eraser") {
+            setShapes(shapes.filter((shape) => shape.id !== id));
+        } else {
+            setSelectedShapeId(id);
+        }
+    };
+    const handleWheel = (e) => {
+        e.evt.preventDefault();
+        const scaleBy = 1.1;
+        const stage = e.currentTarget;
+        const oldScale = stage.scaleX();
+        const mousePointTo = {
+            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
+        };
+        const newScale =
+            e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+        setScale(newScale);
+        setStagePos({
+            x:
+                -(mousePointTo.x - stage.getPointerPosition().x / newScale) *
+                newScale,
+            y:
+                -(mousePointTo.y - stage.getPointerPosition().y / newScale) *
+                newScale,
+        });
+    };
+
+    const getCursor = () => {
+        switch (activeShape) {
+            case "Move":
+                return "grab";
+            case "Selector":
+                return "default";
+            default:
+                return "crosshair";
+        }
     };
 
     return (
@@ -232,7 +317,7 @@ export default function Canvas() {
                     historyIndex={historyIndex}
                     setShapes={setShapes}
                     setHistoryIndex={setHistoryIndex}
-                    setSelectedShapeIndex={setSelectedShapeIndex}
+                    setSelectedShapeId={setSelectedShapeId}
                 />
             </ButtonsWrapper>
 
@@ -242,28 +327,28 @@ export default function Canvas() {
                 ref={stageRef}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
+                draggable={activeShape === "Move"}
                 onMouseUp={handleMouseUp}
                 style={{
-                    cursor: activeShape !== "pointer" ? "grab" : "pointer",
-                    background: "#1B4242",
+                    cursor: getCursor(),
                 }}
                 scaleX={scale}
                 scaleY={scale}
+                onDragEnd={handleStageDragEnd}
+                // onWheel={handleWheel}
             >
-                <Grid />
+                <SmallGrid />
+                {/* <Grid /> */}
                 <Layer className="grid-layer" ref={layerRef}>
-                    {shapes.map((shape, index) => {
+                    {shapes.map((shape) => {
                         if (shape.type === "Rectangle") {
                             return (
                                 <RectangleShape
                                     shape={shape}
-                                    index={index}
                                     handleDragEnd={handleDragEnd}
-                                    setSelectedShapeIndex={
-                                        setSelectedShapeIndex
-                                    }
-                                    selectedShapeIndex={selectedShapeIndex}
-                                    isSelected={selectedShapeIndex === index}
+                                    selectedShapeId={selectedShapeId}
+                                    handleShapeClick={handleShapeClick}
+                                    isSelected={selectedShapeId === shape.id}
                                     layerRef={layerRef}
                                     setShapes={setShapes}
                                     shapes={shapes}
@@ -272,14 +357,11 @@ export default function Canvas() {
                         } else if (shape.type === "Circle") {
                             return (
                                 <CircleShape
-                                    circle={shape}
-                                    index={index}
+                                    shape={shape}
                                     handleDragEnd={handleDragEnd}
-                                    setSelectedShapeIndex={
-                                        setSelectedShapeIndex
-                                    }
-                                    selectedShapeIndex={selectedShapeIndex}
-                                    isSelected={selectedShapeIndex === index}
+                                    selectedShapeId={selectedShapeId}
+                                    handleShapeClick={handleShapeClick}
+                                    isSelected={selectedShapeId === shape.id}
                                     layerRef={layerRef}
                                     setShapes={setShapes}
                                     shapes={shapes}
@@ -289,13 +371,10 @@ export default function Canvas() {
                             return (
                                 <LineShape
                                     shape={shape}
-                                    index={index}
                                     handleDragEnd={handleDragEnd}
-                                    setSelectedShapeIndex={
-                                        setSelectedShapeIndex
-                                    }
-                                    selectedShapeIndex={selectedShapeIndex}
-                                    isSelected={selectedShapeIndex === index}
+                                    selectedShapeId={selectedShapeId}
+                                    handleShapeClick={handleShapeClick}
+                                    isSelected={selectedShapeId === shape.id}
                                     layerRef={layerRef}
                                     setShapes={setShapes}
                                     shapes={shapes}
@@ -305,13 +384,10 @@ export default function Canvas() {
                             return (
                                 <LineShape
                                     shape={shape}
-                                    index={index}
                                     handleDragEnd={handleDragEnd}
-                                    setSelectedShapeIndex={
-                                        setSelectedShapeIndex
-                                    }
-                                    selectedShapeIndex={selectedShapeIndex}
-                                    isSelected={selectedShapeIndex === index}
+                                    selectedShapeId={selectedShapeId}
+                                    handleShapeClick={handleShapeClick}
+                                    isSelected={selectedShapeId === shape.id}
                                     layerRef={layerRef}
                                     setShapes={setShapes}
                                     shapes={shapes}
@@ -321,13 +397,10 @@ export default function Canvas() {
                             return (
                                 <ArrowShape
                                     shape={shape}
-                                    index={index}
                                     handleDragEnd={handleDragEnd}
-                                    setSelectedShapeIndex={
-                                        setSelectedShapeIndex
-                                    }
-                                    selectedShapeIndex={selectedShapeIndex}
-                                    isSelected={selectedShapeIndex === index}
+                                    selectedShapeId={selectedShapeId}
+                                    handleShapeClick={handleShapeClick}
+                                    isSelected={selectedShapeId === shape.id}
                                     layerRef={layerRef}
                                     setShapes={setShapes}
                                     shapes={shapes}
@@ -337,13 +410,10 @@ export default function Canvas() {
                             return (
                                 <TextShape
                                     shape={shape}
-                                    index={index}
                                     handleDragEnd={handleDragEnd}
-                                    setSelectedShapeIndex={
-                                        setSelectedShapeIndex
-                                    }
-                                    selectedShapeIndex={selectedShapeIndex}
-                                    isSelected={selectedShapeIndex === index}
+                                    selectedShapeId={selectedShapeId}
+                                    handleShapeClick={handleShapeClick}
+                                    isSelected={selectedShapeId === shape.id}
                                     layerRef={layerRef}
                                     setShapes={setShapes}
                                     shapes={shapes}
