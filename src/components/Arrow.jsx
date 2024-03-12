@@ -25,10 +25,11 @@ export default function ArrowShape({
             <Arrow
                 key={shape.id}
                 points={shape.points}
-                stroke="white"
+                stroke={shape.stroke}
                 strokeWidth={2}
                 tension={0.5}
                 lineCap="round"
+                fill={shape.fill}
                 ref={shapeRef}
                 draggable={selectedShapeId === shape.id}
                 onDragEnd={(e) => handleDragEnd(e, shape.id)}

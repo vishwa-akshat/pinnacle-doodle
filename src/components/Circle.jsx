@@ -26,9 +26,10 @@ export default function CircleShape({
                 key={shape.id}
                 x={shape.x}
                 y={shape.y}
+                fill={shape.fill}
                 draggable={selectedShapeId === shape.id}
                 ref={shapeRef}
-                stroke="white"
+                stroke={shape.stroke}
                 onDragEnd={(e) => handleDragEnd(e, shape.id)}
                 radius={shape.radius}
                 strokeWidth={2}

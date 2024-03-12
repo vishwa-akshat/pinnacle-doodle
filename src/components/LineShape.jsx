@@ -25,9 +25,10 @@ export default function LineShape({
             <Line
                 key={shape.id}
                 points={shape.points}
-                stroke="white"
+                stroke={shape.stroke}
                 strokeWidth={2}
                 tension={0.5}
+                fill={shape.fill}
                 ref={shapeRef}
                 lineCap="round"
                 draggable={selectedShapeId === shape.id}

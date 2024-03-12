@@ -12,6 +12,8 @@ import ArrowShape from "./Arrow";
 import UndoRedoButtons from "./UndoRedoButtons";
 import TextShape from "./Text";
 import ZoomInZoomOutButtons from "./ZoomInZoomOutButtons";
+import Grid from "./Grid";
+import ShapeEditor from "./ShapeEditor";
 // import GridBG from "./GridBG";
 
 const Wrapper = styled.div`
@@ -24,6 +26,13 @@ const ButtonsWrapper = styled.div`
     left: 30px;
     display: flex;
     gap: 30px;
+`;
+
+const ShapeEditorWrapper = styled.div`
+    position: absolute;
+    z-index: 999;
+    top: 100px;
+    left: 30px;
 `;
 
 export default function Canvas() {
@@ -122,7 +131,13 @@ export default function Canvas() {
                 break;
         }
 
-        newShape = { ...newShape, type: activeShape, id: uuidv4() };
+        newShape = {
+            ...newShape,
+            type: activeShape,
+            id: uuidv4(),
+            stroke: "#ffffff",
+            fill: null,
+        };
 
         const updatedShapes = [...shapes, newShape];
         setShapes(updatedShapes);
@@ -201,69 +216,6 @@ export default function Canvas() {
         setShapes(updatedShape);
     };
 
-    const Grid = () => {
-        const baseCellSize = 80; // Initial cell size (adjust as needed)
-
-        // Calculate grid dimensions based on canvas size and zoom level
-        const canvasWidth = window.innerWidth;
-        const canvasHeight = window.innerHeight;
-        const numRows = Math.ceil(canvasHeight / (baseCellSize * scale));
-        const numCols = Math.ceil(canvasWidth / (baseCellSize * scale));
-
-        // Create grid rectangles
-        const gridCells = [];
-        for (let row = 0; row < numRows; row++) {
-            for (let col = 0; col < numCols; col++) {
-                const cellSize = baseCellSize * scale;
-                gridCells.push(
-                    <Rect
-                        strokeWidth={1}
-                        key={`${row}-${col}`}
-                        x={col * cellSize}
-                        y={row * cellSize}
-                        width={cellSize}
-                        height={cellSize}
-                        stroke="#222222"
-                    />
-                );
-            }
-        }
-
-        return <Layer>{gridCells}</Layer>;
-    };
-    const SmallGrid = () => {
-        const baseCellSize = 20; // Initial cell size (adjust as needed)
-
-        // Calculate grid dimensions based on canvas size and zoom level
-        const canvasWidth = window.innerWidth;
-        const canvasHeight = window.innerHeight;
-        const numRows = Math.ceil(canvasHeight / (baseCellSize * scale));
-        const numCols = Math.ceil(canvasWidth / (baseCellSize * scale));
-
-        // Create grid rectangles
-        const gridCells = [];
-        for (let row = 0; row < numRows; row++) {
-            for (let col = 0; col < numCols; col++) {
-                const cellSize = baseCellSize * scale;
-                gridCells.push(
-                    <Rect
-                        key={`${row}-${col}`}
-                        x={col * cellSize}
-                        y={row * cellSize}
-                        width={cellSize}
-                        height={cellSize}
-                        fill="black"
-                        stroke="#3131317a"
-                        strokeWidth={1}
-                        dash={[4, 5]}
-                    />
-                );
-            }
-        }
-
-        return <Layer>{gridCells}</Layer>;
-    };
-
     const handleStageDragEnd = (e) => {
         setStagePos(e.currentTarget.position());
     };
@@ -321,6 +273,16 @@ export default function Canvas() {
                 />
             </ButtonsWrapper>
 
+            {selectedShapeId && (
+                <ShapeEditorWrapper>
+                    <ShapeEditor
+                        selectedShapeId={selectedShapeId}
+                        shapes={shapes}
+                        setShapes={setShapes}
+                    />
+                </ShapeEditorWrapper>
+            )}
+
             <Stage
                 width={window.innerWidth}
                 height={window.innerHeight}
@@ -337,8 +299,14 @@ export default function Canvas() {
                 onDragEnd={handleStageDragEnd}
                 // onWheel={handleWheel}
             >
-                <SmallGrid />
-                {/* <Grid /> */}
+                <Grid
+                    baseCellSize={80}
+                    scale={scale}
+                    strokeColor="#222222"
+                    isBottom
+                />
+                <Grid baseCellSize={20} scale={scale} strokeColor="#3131317a" />
+
                 <Layer className="grid-layer" ref={layerRef}>
                     {shapes.map((shape) => {
                         if (shape.type === "Rectangle") {
