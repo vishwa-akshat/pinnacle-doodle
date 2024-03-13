@@ -89,7 +89,7 @@ export default function RectangleShape({
                 stroke={shape.stroke}
                 fill={shape.fill}
                 opacity={1}
-                strokeWidth={2}
+                strokeWidth={shape.strokeWidth}
                 fillPatternImage={getMeshXPattern()} // Set a mesh pattern image
                 fillPatternOffset={{ x: 0, y: 0 }}
                 fillPatternRepeat="repeat"

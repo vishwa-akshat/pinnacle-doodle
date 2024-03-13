@@ -32,7 +32,7 @@ export default function CircleShape({
                 stroke={shape.stroke}
                 onDragEnd={(e) => handleDragEnd(e, shape.id)}
                 radius={shape.radius}
-                strokeWidth={2}
+                strokeWidth={shape.strokeWidth}
                 onClick={() => handleShapeClick(shape.id)}
                 onTransformEnd={(e) => {
                     const node = e.target;

@@ -26,7 +26,7 @@ export default function ArrowShape({
                 key={shape.id}
                 points={shape.points}
                 stroke={shape.stroke}
-                strokeWidth={2}
+                strokeWidth={shape.strokeWidth}
                 tension={0.5}
                 lineCap="round"
                 fill={shape.fill}

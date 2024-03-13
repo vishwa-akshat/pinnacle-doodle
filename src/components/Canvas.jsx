@@ -137,6 +137,7 @@ export default function Canvas() {
             id: uuidv4(),
             stroke: "#ffffff",
             fill: null,
+            strokeWidth: 2,
         };
 
         const updatedShapes = [...shapes, newShape];

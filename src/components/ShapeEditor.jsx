@@ -2,6 +2,11 @@
 import styled from "styled-components";
 
 import ColorSelect from "./ColorSelect";
+import StrokeWidthSelect from "./StrokeWidthSelect";
+
+import lineThinIcon from "../assets/stroke-thin.svg";
+import lineMediumIcon from "../assets/stroke-medium.svg";
+import lineHeavyIcon from "../assets/stroke-heavy.svg";
 
 const EditorWrapper = styled.div`
     background: #092635;
@@ -9,6 +14,8 @@ const EditorWrapper = styled.div`
     padding: 5px 10px;
     border-radius: 10px;
     width: 170px;
+    height: 50vh;
+    overflow-y: scroll;
 `;
 const EditBlockWrapper = styled.div`
     margin-bottom: 10px;
@@ -18,7 +25,7 @@ const Title = styled.p`
 `;
 
 export default function ShapeEditor({ selectedShapeId, shapes, setShapes }) {
-    // const currentShape = shapes.find((shape) => shape.id === selectedShapeId);
+    const currentShape = shapes.find((shape) => shape.id === selectedShapeId);
 
     const strokecolors = [
         "#ffffff",
@@ -34,6 +41,22 @@ export default function ShapeEditor({ selectedShapeId, shapes, setShapes }) {
         "#56a2e8",
         "#b76100",
     ];
+
+    const strokeWidths = [
+        { id: 1, width: 2, icon: lineThinIcon },
+        { id: 2, width: 5, icon: lineMediumIcon },
+        { id: 3, width: 8, icon: lineHeavyIcon },
+    ];
+
+    const setStrokeWidth = (width) => {
+        const newShapes = shapes.map((shape) =>
+            shape.id === selectedShapeId
+                ? { ...shape, strokeWidth: width }
+                : shape
+        );
+
+        setShapes(newShapes);
+    };
 
     const setStrokeColor = (color) => {
         const newShapes = shapes.map((shape) =>
@@ -76,13 +99,42 @@ export default function ShapeEditor({ selectedShapeId, shapes, setShapes }) {
 
             <EditBlockWrapper>
                 <Title>Stroke Width</Title>
+                <StrokeWidthSelect
+                    currentWidth={currentShape.strokeWidth}
+                    setStrokeWidth={setStrokeWidth}
+                    strokeWidths={strokeWidths}
+                />
+            </EditBlockWrapper>
+            <EditBlockWrapper>
+                <Title>Stroke Style</Title>
                 <ColorSelect
                     colorsArr={bgcolors}
                     setColor={setBackgroundColor}
                 />
             </EditBlockWrapper>
             <EditBlockWrapper>
-                <Title>Stroke Style</Title>
+                <Title>Edges</Title>
+                <ColorSelect
+                    colorsArr={bgcolors}
+                    setColor={setBackgroundColor}
+                />
+            </EditBlockWrapper>
+            <EditBlockWrapper>
+                <Title>Opacity</Title>
+                <ColorSelect
+                    colorsArr={bgcolors}
+                    setColor={setBackgroundColor}
+                />
+            </EditBlockWrapper>
+            <EditBlockWrapper>
+                <Title>Layers</Title>
+                <ColorSelect
+                    colorsArr={bgcolors}
+                    setColor={setBackgroundColor}
+                />
+            </EditBlockWrapper>
+            <EditBlockWrapper>
+                <Title>Actions</Title>
                 <ColorSelect
                     colorsArr={bgcolors}
                     setColor={setBackgroundColor}
