@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import useCanvasStore from "./store/canvasStore";
 
-import Canvas from "./components/canvas";
+import Canvas from "./components/Canvas";
 import Toolbar from "./components/Toolbar";
 
 const Container = styled.main`

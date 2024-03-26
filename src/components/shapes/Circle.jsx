@@ -1,14 +1,16 @@
 import { useRef, useEffect } from "react";
-import { Arrow, Transformer } from "react-konva";
+import { Circle, Transformer } from "react-konva";
 
-export default function ArrowShape({
+import { getFillPattern } from "../../utils/getFillPatern";
+
+export default function CircleShape({
     shape,
     handleDragEnd,
-    handleShapeClick,
     selectedShapeId,
     isSelected,
     shapes,
     setShapes,
+    handleShapeClick,
 }) {
     const shapeRef = useRef();
     const transformerRef = useRef(null);
@@ -22,28 +24,34 @@ export default function ArrowShape({
 
     return (
         <>
-            <Arrow
+            <Circle
                 key={shape.id}
-                points={shape.points}
-                stroke={shape.stroke}
-                strokeWidth={shape.strokeWidth}
-                tension={0.5}
-                lineCap="round"
-                fill={shape.fill}
-                ref={shapeRef}
+                x={shape.x}
+                y={shape.y}
+                dash={[shape.dash]}
+                fill={shape.fillStyle === "full" && shape.fill}
+                fillPatternImage={getFillPattern(shape.fillStyle, shape.fill)}
+                fillPatternOffset={{ x: 0, y: 0 }}
+                fillPatternRepeat="repeat"
                 draggable={selectedShapeId === shape.id}
+                ref={shapeRef}
+                opacity={shape.opacity}
+                cornerRadius={shape.edge}
+                stroke={shape.stroke}
                 onDragEnd={(e) => handleDragEnd(e, shape.id)}
+                radius={shape.radius}
+                strokeWidth={shape.strokeWidth}
                 onClick={() => handleShapeClick(shape.id)}
                 onTransformEnd={(e) => {
                     const node = e.target;
                     const index = node.index;
+
                     const updatedshapes = [...shapes];
                     updatedshapes[index] = {
                         ...updatedshapes[index],
                         x: node.x(),
                         y: node.y(),
-                        width: node.width() * node.scaleX(),
-                        height: node.height() * node.scaleY(),
+                        radius: node.radius() * node.scaleX(),
                     };
                     setShapes(updatedshapes);
                     node.scaleX(1);

@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-
 const StrokeWidthSelectWrapper = styled.div`
     display: flex;
     gap: 10px;
     align-items: center;
 `;
+
 const StrokeWidthBlock = styled.div`
     display: flex;
     justify-content: center;
@@ -24,12 +24,19 @@ const StrokeIcon = styled.img`
     margin-bottom: 15px;
 `;
 
-
-export default function StrokeWidthSelect({currentWidth,strokeWidths, setStrokeWidth}) {
+export default function StrokeWidthSelect({
+    currentWidth,
+    strokeWidths,
+    setStrokeWidth,
+}) {
     return (
         <StrokeWidthSelectWrapper>
-            {strokeWidths.map(({ id, icon,  width }) => (
-                <StrokeWidthBlock  onClick={()=> setStrokeWidth(width)} isSelected={currentWidth === width} key={id}>
+            {strokeWidths.map(({ id, icon, width }) => (
+                <StrokeWidthBlock
+                    onClick={() => setStrokeWidth(width)}
+                    isSelected={currentWidth === width}
+                    key={id}
+                >
                     <StrokeIcon src={icon} alt={`Stroke Width ${id}`} />
                 </StrokeWidthBlock>
             ))}

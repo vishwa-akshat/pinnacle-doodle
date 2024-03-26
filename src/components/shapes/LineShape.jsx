@@ -1,6 +1,8 @@
 import { useRef, useEffect } from "react";
 import { Line, Transformer } from "react-konva";
 
+import { getFillPattern } from "../../utils/getFillPatern";
+
 export default function LineShape({
     shape,
     handleDragEnd,
@@ -26,11 +28,16 @@ export default function LineShape({
                 key={shape.id}
                 points={shape.points}
                 stroke={shape.stroke}
+                dash={[shape.dash]}
                 strokeWidth={shape.strokeWidth}
                 tension={0.5}
-                fill={shape.fill}
+                opacity={shape.opacity}
+                cornerRadius={shape.edge}
+                fill={shape.fillStyle === "full" && shape.fill}
+                fillPatternImage={getFillPattern(shape.fillStyle, shape.fill)}
+                fillPatternOffset={{ x: 0, y: 0 }}
+                fillPatternRepeat="repeat"
                 ref={shapeRef}
-                lineCap="round"
                 draggable={selectedShapeId === shape.id}
                 onDragEnd={(e) => {
                     const node = e.target;

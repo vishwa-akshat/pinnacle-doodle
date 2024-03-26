@@ -3,12 +3,12 @@ import { Stage, Layer, Line, Rect } from "react-konva";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 
-import CircleShape from "./Circle";
-import RectangleShape from "./Rectangle";
+import CircleShape from "./shapes/Circle";
+import RectangleShape from "./shapes/Rectangle";
 
 import useCanvasStore from "../store/canvasStore";
-import LineShape from "./LineShape";
-import ArrowShape from "./Arrow";
+import LineShape from "./shapes/LineShape";
+import ArrowShape from "./shapes/Arrow";
 import UndoRedoButtons from "./UndoRedoButtons";
 import TextShape from "./Text";
 import ZoomInZoomOutButtons from "./ZoomInZoomOutButtons";
@@ -136,8 +136,12 @@ export default function Canvas() {
             type: activeShape,
             id: uuidv4(),
             stroke: "#ffffff",
-            fill: null,
+            fill: "transparent",
             strokeWidth: 2,
+            fillStyle: "none",
+            dash: 0,
+            corner: 0,
+            opacity: 1,
         };
 
         const updatedShapes = [...shapes, newShape];
@@ -278,6 +282,7 @@ export default function Canvas() {
                 <ShapeEditorWrapper>
                     <ShapeEditor
                         selectedShapeId={selectedShapeId}
+                        setSelectedShapeId={setSelectedShapeId}
                         shapes={shapes}
                         setShapes={setShapes}
                     />
