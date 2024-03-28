@@ -25,7 +25,6 @@ export default function RectangleShape({
     return (
         <>
             <Rect
-                key={shape.id}
                 x={shape.x}
                 y={shape.y}
                 width={shape.width}

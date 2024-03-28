@@ -10,8 +10,8 @@ export default function BringToFront({ style }) {
             class=""
             fill="none"
             stroke="#fff"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             style={style}
         >
             <g clip-path="url(#a)" stroke="#fff" stroke-width="1.25">

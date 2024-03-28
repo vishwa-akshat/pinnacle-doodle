@@ -10,8 +10,8 @@ export default function DeleteIcon({ style }) {
             class=""
             fill="none"
             stroke="#fff"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             style={style}
         >
             <path

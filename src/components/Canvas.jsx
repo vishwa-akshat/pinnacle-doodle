@@ -119,14 +119,14 @@ export default function Canvas() {
                     points: [position.x, position.y],
                 };
                 break;
-            // case "Text":
-            //     newShape = {
-            //         x: position.x,
-            //         y: position.y,
-            //         text: textValue,
-            //         type: activeShape,
-            //     };
-            //     break;
+            case "Text":
+                newShape = {
+                    x: position.x,
+                    y: position.y,
+                    text: "Add your text here",
+                    type: activeShape,
+                };
+                break;
             default:
                 break;
         }
@@ -191,10 +191,10 @@ export default function Canvas() {
                     currentShape.width = position.x - currentShape.x;
                     currentShape.height = position.y - currentShape.y;
                     break;
-                // case "Text":
-                //     currentShape.x = position.x;
-                //     currentShape.y = position.y;
-                //     break;
+                case "Text":
+                    currentShape.x = position.x;
+                    currentShape.y = position.y;
+                    break;
                 default:
                     break;
             }
