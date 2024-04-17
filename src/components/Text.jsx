@@ -3,7 +3,6 @@ import { Text, Transformer } from "react-konva";
 
 export default function TextShape({
     shape,
-    index,
     handleDragEnd,
     setSelectedShapeId,
     selectedShapeId,
@@ -22,12 +21,16 @@ export default function TextShape({
         }
     }, [isSelected]);
 
+    useEffect(() => {
+        handleDblClick();
+    }, []);
+
     const handleDblClick = () => {
         const textNode = textNodeRef.current;
         const tr = trRef.current;
 
-        // textNode.hide();
-        // tr.hide();
+        textNode?.hide();
+        tr?.hide();
 
         const stage = textNode.getStage();
         const textPosition = textNode.absolutePosition();
@@ -81,11 +84,16 @@ export default function TextShape({
         textarea.focus();
 
         const removeTextarea = () => {
-            textarea.parentNode.removeChild(textarea);
+            textarea.parentElement.removeChild(textarea);
             window.removeEventListener("click", handleOutsideClick);
-            textNode.show();
-            tr.show();
-            tr.getLayer().batchDraw();
+            setShapes(
+                shapes.map((s) =>
+                    s.id === shape.id ? { ...s, text: textNode.text() } : s
+                )
+            );
+            textNode?.show();
+            tr?.show();
+            tr?.getLayer().batchDraw();
         };
 
         const setTextareaWidth = (newWidth) => {
@@ -107,6 +115,7 @@ export default function TextShape({
             if (e.keyCode === 27) {
                 removeTextarea();
             }
+            setSelectedShapeId(null);
         });
 
         textarea.addEventListener("keydown", (e) => {
@@ -137,12 +146,13 @@ export default function TextShape({
                 x={shape.x}
                 y={shape.y}
                 fontSize={21}
-                width={500}
                 draggable={selectedShapeId === shape.id}
                 onDragEnd={(e) => handleDragEnd(e, shape.id)}
+                onDblClick={() => {
+                    handleDblClick();
+                }}
                 onClick={() => {
                     handleShapeClick(shape.id);
-                    handleDblClick();
                 }}
             />
             {isSelected && <Transformer ref={trRef} />}

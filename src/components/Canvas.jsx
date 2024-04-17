@@ -123,7 +123,7 @@ export default function Canvas() {
                 newShape = {
                     x: position.x,
                     y: position.y,
-                    text: "Add your text here",
+                    text: "",
                     type: activeShape,
                 };
                 break;
@@ -318,6 +318,7 @@ export default function Canvas() {
                         if (shape.type === "Rectangle") {
                             return (
                                 <RectangleShape
+                                    key={shape.id}
                                     shape={shape}
                                     handleDragEnd={handleDragEnd}
                                     selectedShapeId={selectedShapeId}
@@ -331,6 +332,7 @@ export default function Canvas() {
                         } else if (shape.type === "Circle") {
                             return (
                                 <CircleShape
+                                    key={shape.id}
                                     shape={shape}
                                     handleDragEnd={handleDragEnd}
                                     selectedShapeId={selectedShapeId}
@@ -344,6 +346,7 @@ export default function Canvas() {
                         } else if (shape.type === "Line") {
                             return (
                                 <LineShape
+                                    key={shape.id}
                                     shape={shape}
                                     handleDragEnd={handleDragEnd}
                                     selectedShapeId={selectedShapeId}
@@ -357,6 +360,7 @@ export default function Canvas() {
                         } else if (shape.type === "Draw") {
                             return (
                                 <LineShape
+                                    key={shape.id}
                                     shape={shape}
                                     handleDragEnd={handleDragEnd}
                                     selectedShapeId={selectedShapeId}
@@ -370,6 +374,7 @@ export default function Canvas() {
                         } else if (shape.type === "Arrow") {
                             return (
                                 <ArrowShape
+                                    key={shape.id}
                                     shape={shape}
                                     handleDragEnd={handleDragEnd}
                                     selectedShapeId={selectedShapeId}
@@ -385,6 +390,7 @@ export default function Canvas() {
                                 <TextShape
                                     shape={shape}
                                     handleDragEnd={handleDragEnd}
+                                    setSelectedShapeId={setSelectedShapeId}
                                     selectedShapeId={selectedShapeId}
                                     handleShapeClick={handleShapeClick}
                                     isSelected={selectedShapeId === shape.id}

@@ -35,10 +35,10 @@ export default function FillSelect({
 }) {
     return (
         <FillSelectWrapper>
-            {fillStyleList.map((fillStyle) => (
+            {fillStyleList.map((fillStyle, idx) => (
                 <FillBlockWrapper
                     onClick={() => setFillStyle(fillStyle.fillType)}
-                    key={fillStyle}
+                    key={`fill-${idx}`}
                     fillStyle={fillStyle}
                     isSelected={currentFillStyle === fillStyle.fillType}
                 >

@@ -25,7 +25,7 @@ export default function LayerEdit({ layerEditList }) {
                 return (
                     <LayerBlockWrapper
                         onClick={layerOption.onClick}
-                        key={layerOption.id}
+                        key={`layer-${layerOption.id}`}
                     >
                         <LayerImg style={{ width: "22px", height: "22px" }} />
                     </LayerBlockWrapper>

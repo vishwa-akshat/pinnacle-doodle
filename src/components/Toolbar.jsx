@@ -102,7 +102,7 @@ export default function Toolbar() {
         <ToolbarWrapper>
             {toolsCollection.map((tool) => (
                 <Tool
-                    key={tool.id}
+                    key={`t-${tool.id}`}
                     isActive={tool.name === activeShape}
                     onClick={() => setActiveShape(tool.name)}
                 >

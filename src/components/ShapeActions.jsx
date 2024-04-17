@@ -25,7 +25,7 @@ export default function ShapeActions({ shapeActionsList }) {
                 return (
                     <ToolActionBlockWrapper
                         onClick={toolActionOption.onClick}
-                        key={toolActionOption.id}
+                        key={`tool-${toolActionOption.id}`}
                     >
                         <ToolActionImg
                             style={{ width: "18px", height: "18px" }}

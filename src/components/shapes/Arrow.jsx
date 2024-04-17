@@ -25,11 +25,11 @@ export default function ArrowShape({
     return (
         <>
             <Arrow
-                key={shape.id}
                 points={shape.points}
                 stroke={shape.stroke}
                 strokeWidth={shape.strokeWidth}
                 tension={0.5}
+                hitStrokeWidth={40}
                 lineCap="round"
                 dash={[shape.dash]}
                 cornerRadius={shape.edge}
@@ -44,16 +44,27 @@ export default function ArrowShape({
                 onClick={() => handleShapeClick(shape.id)}
                 onTransformEnd={(e) => {
                     const node = e.target;
-                    const index = node.index;
-                    const updatedshapes = [...shapes];
-                    updatedshapes[index] = {
-                        ...updatedshapes[index],
-                        x: node.x(),
-                        y: node.y(),
-                        width: node.width() * node.scaleX(),
-                        height: node.height() * node.scaleY(),
-                    };
-                    setShapes(updatedshapes);
+                    const scaleX = node.scaleX();
+                    const scaleY = node.scaleY();
+                    const width = node.width() * scaleX;
+                    const height = node.height() * scaleY;
+
+                    const updatedShapes = shapes.map((shp) => {
+                        if (shp.id === shape.id) {
+                            return {
+                                ...shp,
+                                points: [
+                                    shp.points[0],
+                                    shp.points[1],
+                                    shp.points[0] + width,
+                                    shp.points[1] + height,
+                                ],
+                            };
+                        }
+                        return shp;
+                    });
+
+                    setShapes(updatedShapes);
                     node.scaleX(1);
                     node.scaleY(1);
                 }}

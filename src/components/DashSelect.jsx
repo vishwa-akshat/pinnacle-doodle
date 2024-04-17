@@ -38,7 +38,7 @@ export default function DashSelect({
             {dashStyleList.map((dashStyle) => (
                 <DashBlockWrapper
                     onClick={() => setDashStyle(dashStyle.dash)}
-                    key={dashStyle.id}
+                    key={`dash-${dashStyle.id}`}
                     isSelected={currentDashStyle === dashStyle.dash}
                 >
                     {dashStyle.icon ? (

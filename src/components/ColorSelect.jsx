@@ -36,7 +36,7 @@ export default function ColorSelect({ setColor, colorsArr }) {
                     />
                 ) : (
                     <ColorBlock
-                        key={idx}
+                        key={`color-${idx}`}
                         style={{ background: color }}
                         onClick={() => setColor(color)}
                     />

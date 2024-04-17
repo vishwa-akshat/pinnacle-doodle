@@ -35,10 +35,10 @@ export default function EdgeSelect({
 }) {
     return (
         <EdgeSelectWrapper>
-            {edgeStyleList.map((edgeStyle) => (
+            {edgeStyleList.map((edgeStyle, idx) => (
                 <EdgeBlockWrapper
                     onClick={() => setEdgeStyle(edgeStyle.edge)}
-                    key={edgeStyle}
+                    key={`edge-${idx}`}
                     edgeStyle={edgeStyle}
                     isSelected={currentEdgeStyle === edgeStyle.edge}
                 >

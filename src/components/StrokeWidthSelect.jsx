@@ -35,7 +35,7 @@ export default function StrokeWidthSelect({
                 <StrokeWidthBlock
                     onClick={() => setStrokeWidth(width)}
                     isSelected={currentWidth === width}
-                    key={id}
+                    key={`stroke-${id}`}
                 >
                     <StrokeIcon src={icon} alt={`Stroke Width ${id}`} />
                 </StrokeWidthBlock>

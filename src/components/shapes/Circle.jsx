@@ -25,7 +25,6 @@ export default function CircleShape({
     return (
         <>
             <Circle
-                key={shape.id}
                 x={shape.x}
                 y={shape.y}
                 dash={[shape.dash]}
