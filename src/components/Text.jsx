@@ -118,7 +118,7 @@ export default function TextShape({
             setSelectedShapeId(null);
         });
 
-        textarea.addEventListener("keydown", (e) => {
+        textarea.addEventListener("keydown", () => {
             const scale = textNode.getAbsoluteScale().x;
             setTextareaWidth(textNode.width() * scale);
             textarea.style.height = "auto";

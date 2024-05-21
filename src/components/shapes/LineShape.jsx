@@ -5,7 +5,7 @@ import { getFillPattern } from "../../utils/getFillPatern";
 
 export default function LineShape({
     shape,
-    handleDragEnd,
+    // handleDragEnd,
     handleShapeClick,
     selectedShapeId,
     isSelected,

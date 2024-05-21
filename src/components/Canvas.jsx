@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { Stage, Layer, Line, Rect } from "react-konva";
+import { Stage, Layer } from "react-konva";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 
@@ -232,27 +232,27 @@ export default function Canvas() {
             setSelectedShapeId(id);
         }
     };
-    const handleWheel = (e) => {
-        e.evt.preventDefault();
-        const scaleBy = 1.1;
-        const stage = e.currentTarget;
-        const oldScale = stage.scaleX();
-        const mousePointTo = {
-            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
-            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
-        };
-        const newScale =
-            e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-        setScale(newScale);
-        setStagePos({
-            x:
-                -(mousePointTo.x - stage.getPointerPosition().x / newScale) *
-                newScale,
-            y:
-                -(mousePointTo.y - stage.getPointerPosition().y / newScale) *
-                newScale,
-        });
-    };
+    // const handleWheel = (e) => {
+    //     e.evt.preventDefault();
+    //     const scaleBy = 1.1;
+    //     const stage = e.currentTarget;
+    //     const oldScale = stage.scaleX();
+    //     const mousePointTo = {
+    //         x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+    //         y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
+    //     };
+    //     const newScale =
+    //         e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+    //     setScale(newScale);
+    //     setStagePos({
+    //         x:
+    //             -(mousePointTo.x - stage.getPointerPosition().x / newScale) *
+    //             newScale,
+    //         y:
+    //             -(mousePointTo.y - stage.getPointerPosition().y / newScale) *
+    //             newScale,
+    //     });
+    // };
 
     const getCursor = () => {
         switch (activeShape) {

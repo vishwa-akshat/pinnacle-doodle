@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-import useCanvasStore from "./store/canvasStore";
-
 import Canvas from "./components/Canvas";
 import Toolbar from "./components/Toolbar";
 
