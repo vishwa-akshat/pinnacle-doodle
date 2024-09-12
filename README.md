@@ -1,4 +1,4 @@
-# Pinnavle Doodle
+# Pinnacle Doodle
 
 Welcome to Pinnavle Doodle! This web application allows users to create and collaborate on drawings with additional features to enhance the drawing experience.
 
